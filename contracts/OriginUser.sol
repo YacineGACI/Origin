@@ -44,11 +44,13 @@ contract OriginUser is Ownable{
 
     function getUser(address _userAddress) view public unpausedSupplyChain returns (string _fullName, string _dateOfBirth, string _email, string _role, string _brand, bool active){
         require(isUser(_userAddress));
+        require(userStructs[_userAddress].active);
         return (userStructs[_userAddress].fullName, userStructs[_userAddress].dateOfBirth, userStructs[_userAddress].email, userStructs[_userAddress].role, userStructs[_userAddress].brand, userStructs[_userAddress].active);
     }
 
     function updateUserFullName(string _fullName) public unpausedSupplyChain returns(bool success){
         require(isUser(msg.sender));
+        require(userStructs[msg.sender].active);
         userStructs[msg.sender].fullName = _fullName;
         emit UpdateUser(userStructs[msg.sender].fullName, userStructs[msg.sender].dateOfBirth, userStructs[msg.sender].email, userStructs[msg.sender].role, userStructs[msg.sender].brand, userStructs[msg.sender].active);
         return true;
@@ -56,6 +58,7 @@ contract OriginUser is Ownable{
 
     function updateUserDateOfBirth(string _dateOfBirth) public unpausedSupplyChain returns(bool success){
         require(isUser(msg.sender));
+        require(userStructs[msg.sender].active);
         userStructs[msg.sender].dateOfBirth = _dateOfBirth;
         emit UpdateUser(userStructs[msg.sender].fullName, userStructs[msg.sender].dateOfBirth, userStructs[msg.sender].email, userStructs[msg.sender].role, userStructs[msg.sender].brand, userStructs[msg.sender].active);
         return true;
@@ -63,6 +66,7 @@ contract OriginUser is Ownable{
 
     function updateUserEmail(string _email) public unpausedSupplyChain returns(bool success){
         require(isUser(msg.sender));
+        require(userStructs[msg.sender].active);
         userStructs[msg.sender].email = _email;
         emit UpdateUser(userStructs[msg.sender].fullName, userStructs[msg.sender].dateOfBirth, userStructs[msg.sender].email, userStructs[msg.sender].role, userStructs[msg.sender].brand, userStructs[msg.sender].active);
         return true;

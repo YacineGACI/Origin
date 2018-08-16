@@ -50,20 +50,20 @@ contract("OriginUser", function(accounts){
         });
     });
 
-    it("should deactivate a user and reactivates it correctly", function(){
-        return OriginUser.deployed().then(function(instance){
-            app = instance;
-            return app.deactivateUser({from:farmInspector});
-        }).then(function(receipt){
-            return app.getUser(farmInspector);
-        }).then(function(res){
-            assert.equal(res[5], false, "User not deactivated");
-            return app.activateUser(farmInspector, {from:admin});
-        }).then(function(receipt){
-            return app.getUser(farmInspector);
-        }).then(function(res){
-            assert.equal(res[5], true, "User not activated");
-        })
-    });
+    // it("should deactivate a user and reactivates it correctly", function(){
+    //     return OriginUser.deployed().then(function(instance){
+    //         app = instance;
+    //         return app.deactivateUser({from:farmInspector});
+    //     }).then(function(receipt){
+    //         return app.getUser(farmInspector);
+    //     }).then(function(res){
+    //         assert.equal(res[5], false, "User not deactivated");
+    //         return app.activateUser(farmInspector, {from:admin});
+    //     }).then(function(receipt){
+    //         return app.getUser(farmInspector);
+    //     }).then(function(res){
+    //         assert.equal(res[5], true, "User not activated");
+    //     })
+    // });
 
 })
