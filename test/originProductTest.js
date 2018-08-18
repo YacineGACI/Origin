@@ -61,24 +61,33 @@ contract("OriginProduct", function(accounts){
         });
     });
 
+    
+
+    it("should get all the products of a user", function(){
+        return OriginProduct.deployed().then(function(instance){
+            app = instance;
+            return app.insertUser("Zach Herney", "06/05/1982", "zach.herney@gmail.com", 0, "ZARA", {from:zaraInc});
+        }).then(function(receipt){
+            return app.getAllUserProducts(zaraInc);
+        }).then(function(res){
+            assert.equal(res[0], 0, "Product ownership not set properly");
+        });
+    });
 
 
-    // it("should deactivate a product and reactivates it correctly", function(){
-    //     return OriginProduct.deployed().then(function(instance){
-    //         app = instance;
-    //         return app.getProductCount();
-    //     }).then(function(count){
-    //         assert.equal(count, 1, "No product available");
-    //         return app.deactivateProduct(0, {from:admin});
-    //     }).then(function(receipt){
-    //         return app.getProductInfoAt(0);
-    //     }).then(function(res){
-    //         assert.equal(res[6], false, "Product not deactivated");
-    //         return app.activateProduct(0, {from:admin});
-    //     }).then(function(receipt){
-    //         return app.getProductInfoAt(0);
-    //     }).then(function(res){
-    //         assert.equal(res[6], true, "Product not activated");
-    //     })
-    // });
+    it("should deactivate a product and reactivates it correctly", function(){
+        return OriginProduct.deployed().then(function(instance){
+            app = instance;
+            return app.getProductCount();
+        }).then(function(count){
+            assert.equal(count, 1, "No product available");
+            return app.deactivateProduct(0, {from:admin});
+        }).then(function(receipt){
+            return app.activateProduct(0, {from:admin});
+        }).then(function(receipt){
+            return app.getProductInfoAt(0);
+        }).then(function(res){
+            assert.equal(res[6], true, "Product not activated");
+        })
+    });
 })

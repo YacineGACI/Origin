@@ -8,6 +8,9 @@ contract("OriginUser", function(accounts){
     var designer = accounts[1];
     var farmInspector = accounts[2];
 
+    var clothDesignerRole = 2;
+    var farmInspectorRole = 3;
+
     it("should return empty list of users", function(){
         return OriginUser.deployed().then(function(instance){
             app = instance;
@@ -21,7 +24,7 @@ contract("OriginUser", function(accounts){
     it("should add new users correctly", function(){
         return OriginUser.deployed().then(function(instance){
             app = instance;
-            return app.insertUser("Yacine GACI", "02/05/1996", "nglsuper0@gmail.com", "cloth desiner", "ZARA", {from:designer});
+            return app.insertUser("Yacine GACI", "02/05/1996", "nglsuper0@gmail.com", clothDesignerRole, "ZARA", {from:designer});
         }).then(function(receipt){
             return app.getUserCount.call();
         }).then(function(count){
@@ -31,7 +34,7 @@ contract("OriginUser", function(accounts){
             assert.equal(res[0], "Yacine GACI", "Name not set properly");
             assert.equal(res[1], "02/05/1996", "Birth date not set properly");
             assert.equal(res[2], "nglsuper0@gmail.com", "Email not set properly");
-            assert.equal(res[3], "cloth desiner", "Role not set properly");
+            assert.equal(res[3], clothDesignerRole, "Role not set properly");
             assert.equal(res[4], "ZARA", "Brand not set properly");
             assert.equal(res[5], true, "Active state not set properly");
         });
@@ -40,7 +43,7 @@ contract("OriginUser", function(accounts){
     it("should update email correctly", function(){
         return OriginUser.deployed().then(function(instance){
             app = instance;
-            return app.insertUser("John Doe", "02/04/1986", "johnd@gmail.com", "farm inspector", "John Doe Inspection", {from:farmInspector});
+            return app.insertUser("John Doe", "02/04/1986", "johnd@gmail.com", farmInspectorRole, "John Doe Inspection", {from:farmInspector});
         }).then(function(receipt){
             return app.updateUserEmail("johndoe@gmail.com", {from:farmInspector});
         }).then(function(receipt){
@@ -50,20 +53,17 @@ contract("OriginUser", function(accounts){
         });
     });
 
-    // it("should deactivate a user and reactivates it correctly", function(){
-    //     return OriginUser.deployed().then(function(instance){
-    //         app = instance;
-    //         return app.deactivateUser({from:farmInspector});
-    //     }).then(function(receipt){
-    //         return app.getUser(farmInspector);
-    //     }).then(function(res){
-    //         assert.equal(res[5], false, "User not deactivated");
-    //         return app.activateUser(farmInspector, {from:admin});
-    //     }).then(function(receipt){
-    //         return app.getUser(farmInspector);
-    //     }).then(function(res){
-    //         assert.equal(res[5], true, "User not activated");
-    //     })
-    // });
+    it("should deactivate a user and reactivates it correctly", function(){
+        return OriginUser.deployed().then(function(instance){
+            app = instance;
+            return app.deactivateUser({from:designer});
+        }).then(function(receipt){
+            return app.activateUser(designer, {from:admin});
+        }).then(function(receipt){
+            return app.getUser(designer);
+        }).then(function(res){
+            assert.equal(res[5], true, "User not activated");
+        })
+    });
 
 })
