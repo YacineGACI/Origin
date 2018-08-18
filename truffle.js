@@ -18,11 +18,18 @@ module.exports = {
       host: "127.0.0.1",
       port: 8545,
       network_id: "*",
-      gas: 6712388
+      gas: 6000000
     }
   },
   
   mocha: {
     useColors: true
-   }
+   },
+
+   solc: {
+    optimizer: {
+        enabled: true,
+        runs: 200
+    }
+}
 };

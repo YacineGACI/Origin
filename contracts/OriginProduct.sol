@@ -37,12 +37,13 @@ contract OriginProduct is OriginUser{
     function createProduct(string _name, string _productType, string _description, uint _quantity, string _place) public unpausedSupplyChain returns (uint index) {
         require(msg.sender != address(0));
 
+        //create the first action
         actions[numberActions].actioner = msg.sender;
         actions[numberActions].comment = "Creation of Product";
         actions[numberActions].place = _place;
         actions[numberActions].time = now;
 
-
+        // Create the product
         ProductStruct memory product;
         product.name = _name;
         product.productType = _productType;
@@ -83,6 +84,11 @@ contract OriginProduct is OriginUser{
         uint index = products[productIndex].path[actionIndex];
         return (actions[index].actioner, actions[index].comment, actions[index].place, actions[index].time);
 
+    }
+
+    function getAllUserProducts(address _user) public view unpausedSupplyChain returns (uint[] p){
+        require(isUser(_user));
+        return userToProducts[_user];
     }
 
     function consumeProduct(uint index) public unpausedSupplyChain returns (bool succes){

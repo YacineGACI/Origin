@@ -8,18 +8,18 @@ contract OriginUser is Ownable{
         string fullName;
         string dateOfBirth;
         string email;
-        string role;
+        uint role;
         string brand;
         bool active;
         uint index;
     }
 
-    mapping (address => UserStruct) private userStructs;
+    mapping (address => UserStruct) public userStructs;
     address[] private userIndex;
 
 
-    event NewUser(string _fullName, string _dateOfBirth, string _email, string _role, string _brand);
-    event UpdateUser(string _fullName, string _dateOfBirth, string _email, string _role, string _brand, bool active);
+    event NewUser(string _fullName, string _dateOfBirth, string _email, uint _role, string _brand);
+    event UpdateUser(string _fullName, string _dateOfBirth, string _email, uint _role, string _brand, bool active);
 
     function isUser(address _userAddress) internal constant returns(bool isIndeed) {
         if(userIndex.length == 0) return false;
@@ -27,7 +27,7 @@ contract OriginUser is Ownable{
     }
 
 
-    function insertUser(string _fullName, string _dateOfBirth, string _email, string _role, string _brand) public unpausedSupplyChain returns (uint index){
+    function insertUser(string _fullName, string _dateOfBirth, string _email, uint _role, string _brand) public unpausedSupplyChain returns (uint index){
         require(!isUser(msg.sender));
         userStructs[msg.sender].fullName = _fullName;
         userStructs[msg.sender].dateOfBirth = _dateOfBirth;
@@ -42,7 +42,7 @@ contract OriginUser is Ownable{
         return userIndex.length - 1;
     }
 
-    function getUser(address _userAddress) view public unpausedSupplyChain returns (string _fullName, string _dateOfBirth, string _email, string _role, string _brand, bool active){
+    function getUser(address _userAddress) view public unpausedSupplyChain returns (string _fullName, string _dateOfBirth, string _email, uint _role, string _brand, bool active){
         require(isUser(_userAddress));
         require(userStructs[_userAddress].active);
         return (userStructs[_userAddress].fullName, userStructs[_userAddress].dateOfBirth, userStructs[_userAddress].email, userStructs[_userAddress].role, userStructs[_userAddress].brand, userStructs[_userAddress].active);
